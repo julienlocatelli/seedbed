@@ -33,6 +33,7 @@ A GitHub template repository with Forest's base toolchain: mise, bun workspaces,
 | `bun run format:check` | Fails when a file is not formatted                     |
 | `bun run knip`         | Unused files, exports and dependencies                 |
 | `bun run lint:story`   | Markdown files given as arguments, with Forest's rules |
+| `bun run test`         | Unit tests (`bun test`)                                |
 | `bun run lint:gherkin` | `.feature` files, with Forest's rules                  |
 
 To lint every Markdown file like the CI does:
@@ -67,8 +68,7 @@ The skills read the project's Notion databases from `.claude/notion.json`, commi
     "idProperty": "<name of the backlog's ID property>"
   },
   "stories": {
-    "dataSource": "collection://<stories data source id>",
-    "template": "<page id of the stories' New Task template>"
+    "dataSource": "collection://<stories data source id>"
   },
   "tasks": {
     "dataSource": "collection://<tasks data source id>"
@@ -76,4 +76,29 @@ The skills read the project's Notion databases from `.claude/notion.json`, commi
 }
 ```
 
-The template ships without this file: `bun run setup` creates the project's Notion databases and writes it. Until then, every process skill stops and asks you to run it.
+The setup also records the project name and the links of the parent page and of each database. The template ships without this file. Until `bun run setup` writes it, every process skill stops and asks you to run the setup.
+
+### Set up Notion
+
+`bun run setup` asks for the project name and a Notion page, and creates three databases under that page, with Forest's properties and statuses:
+
+| Database | Properties                                                                                                          |
+| -------- | ------------------------------------------------------------------------------------------------------------------- |
+| Backlog  | `Name`, `ID` (`BL-<n>`), `Status` (To define, In progress, Done), `Assign`, `Date`                                  |
+| Stories  | `Name`, `TASK` (`TASK-<n>`), `Status` (To Define, To Do, Doing, Review, Done 🙌), `Branch`, `Date Created`, `Tasks` |
+| Tasks    | `Name`, `#`, `Slice`, `Status` (To Do, Doing, Done), `Story`                                                        |
+
+`Tasks` and `Story` are the two sides of one relation. Each story published by `/specification` gets a Kanban board of its own tasks under `# To Do`. The Notion API cannot create database templates, so the skill adds the board instead of a "New Task" template.
+
+The setup reaches Notion through an integration token:
+
+1. In Notion, open **Settings → Connections → Develop or manage integrations**, choose **New integration** and give it the **Read**, **Update** and **Insert content** capabilities.
+2. Copy its **Internal Integration Secret**.
+3. Open the page that will hold the databases, then **••• → Connections**, and add the integration.
+4. Run the setup with the secret, then commit `.claude/notion.json`:
+
+   ```sh
+   NOTION_TOKEN=<secret> bun run setup
+   ```
+
+Running it again on a configured project changes nothing. Without a token, or without access to the page, it stops and prints these steps. If it fails after creating some databases, it lists them: delete them in Notion before running it again.

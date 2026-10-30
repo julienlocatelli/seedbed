@@ -23,7 +23,7 @@ Read the targets from `.claude/notion.json` at the repository root. If the file 
 | Tasks data source | `tasks.dataSource` |
 | Task properties | `Name` (title: the task), `#` (number), `Slice` (text), `Status` (status), `Story` (relation to the story page) |
 | Task statuses | `To Do` → `Doing` → `Done` |
-| Story board | The "New Task" template puts a Kanban view of the story's own tasks under `# To Do` |
+| Story board | `/specification` puts a Kanban view of the story's own tasks under `# To Do` |
 | Story's tasks | Fetch the story page; under `# To Do` take the linked `<database>` whose `data-source-url` is the Tasks data source, fetch it, and query its board view in `view` mode. The view returns only this story's tasks, sorted by `#`, and costs no `rows`/SQL query allowance |
 
 If a fetch shows a schema or option name different from this table, stop and tell the user instead of guessing.
