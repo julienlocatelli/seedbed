@@ -1,0 +1,38 @@
+name: Checks
+
+# Runs the repository checks on every pull request into main.
+# The `checks` job is a required status check on main: a failing or unfinished run blocks the merge.
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    branches: [main]
+
+permissions:
+  contents: read
+
+# A new push replaces the run still going on the same pull request.
+concurrency:
+  group: checks-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    # No secret: the checks only read the repository.
+    steps:
+      - uses: actions/checkout@v4
+      - uses: jdx/mise-action@v2
+        with:
+          install_args: bun node
+      - name: Install dependencies
+        run: bun install --frozen-lockfile --ignore-scripts
+      - name: Lint
+        run: bun run lint
+      - name: Format check
+        run: bun run format:check
+      - name: Unused code (knip)
+        run: bun run knip
+      - name: Markdown lint
+        run: bun run lint:story "**/*.md" "#node_modules"
+      - name: Gherkin lint
+        run: bun run lint:gherkin
