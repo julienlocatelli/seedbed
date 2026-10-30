@@ -1,0 +1,11 @@
+{
+  "config": {
+    "default": true,
+    // Notion renders long lines; wrapping only hurts readability there.
+    "MD013": false,
+    // User stories start at "## User story"; the page title is a Notion property.
+    "MD041": false,
+    "MD024": { "siblings_only": true },
+    "MD040": true
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "no-files-without-scenarios": "on",
+  "no-unnamed-features": "on",
+  "no-unnamed-scenarios": "on",
+  "no-dupe-scenario-names": ["on", "in-feature"],
+  "no-empty-file": "on",
+  "no-empty-background": "on",
+  "no-background-only-scenario": "on",
+  "no-scenario-outlines-without-examples": "on",
+  "no-examples-in-scenarios": "on",
+  "no-unused-variables": "on",
+  "no-multiple-empty-lines": "on",
+  "no-trailing-spaces": "on",
+  "use-and": "on",
+  "keywords-in-logical-order": "on",
+  "only-one-when": "on",
+  "scenario-size": ["on", { "steps-length": { "Background": 4, "Scenario": 6 } }],
+  "name-length": ["on", { "Feature": 70, "Scenario": 80, "Step": 100 }],
+  "indentation": [
+    "on",
+    { "Feature": 0, "Background": 2, "Scenario": 2, "Step": 4, "Examples": 4, "example": 6 }
+  ],
+  "no-restricted-patterns": [
+    "on",
+    { "Global": ["\\bclicks?\\b", "\\bbutton\\b", "\\bselector\\b", "\\bxpath\\b", "\\bcss\\b"] }
+  ]
+}

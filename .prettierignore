@@ -1,0 +1,8 @@
+node_modules/
+dist/
+build/
+coverage/
+bun.lock
+
+# Skills and their lint rules come from Forest as they are; lint:story checks the Markdown.
+.claude/
