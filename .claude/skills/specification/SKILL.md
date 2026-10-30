@@ -20,7 +20,7 @@ Read the targets from `.claude/notion.json` at the repository root. If the file 
 | Backlog ID column | `backlog.idProperty` (`auto_increment_id`, displayed as `<PREFIX>-<n>`, for example `BL-19`) |
 | Backlog statuses | `To define` → `In progress` → `Done` |
 | Stories data source | `stories.dataSource` |
-| Stories template ("New Task") | `stories.template` |
+| Tasks data source | `tasks.dataSource`: each story shows a Kanban board of its own tasks |
 | New story status | `To Define` |
 
 If a fetch shows a schema or option name different from this table, stop and tell the user instead of guessing.
@@ -89,12 +89,17 @@ Show every drafted story in full and ask for approval. Apply requested changes, 
 
 ### 7. Publish
 
-Read `notion://docs/notion-flavored-markdown-spec` once before the first write. For each approved story:
+Read `notion://docs/notion-flavored-markdown-spec` and `notion://docs/view-dsl-spec` once before the first write. For each approved story:
 
-1. Create the page in the stories data source with `template_id` set to the "New Task" template and properties `Name` (the title) and `Status: "To Define"`. Do not pass `content` with a template.
-2. Template application is asynchronous: fetch the page until its `# To Do` section appears.
-3. Insert the story with `insert_content` at `position: {"type": "start"}`, so it sits above the template's `# To Do` section. Leave that section untouched; it is for implementation tasks later.
-4. Fetch the page again and check the content and status. After an uncertain or failed write, fetch before retrying so you don't duplicate content.
+1. Create the page in the stories data source with properties `Name` (the title) and `Status: "To Define"`, and as content the story followed by a last `# To Do` heading.
+2. Add the story's board under `# To Do` with `create-view`: `parent_page_id` the story page, `data_source_id` the tasks data source, `type` `board`, `name` `Board`, `show_data_source_title` `false`, and `configure`:
+
+   ```text
+   FILTER "Story" = "<story page URL>"; GROUP BY "Status" BY OPTION SHOW EMPTY; SORT BY "#" ASC; SHOW "Name", "#", "Slice"
+   ```
+
+   The board lists only this story's tasks, in `To Do`, `Doing` and `Done` columns. Leave the `# To Do` section otherwise empty; `/plan` fills the board with tasks later.
+3. Fetch the page again and check the content, the status, and that a linked `<database>` on the tasks data source sits under `# To Do`. After an uncertain or failed write, fetch before retrying so you don't duplicate content or boards.
 
 ### 8. Close the ticket
 

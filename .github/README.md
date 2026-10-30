@@ -11,6 +11,7 @@ Each check is its own step, named in the run:
 | Lint               | `bun run lint`                                                            |
 | Format check       | `bun run format:check`                                                    |
 | Unused code (knip) | `bun run knip`                                                            |
+| Unit tests         | `bun run test`                                                            |
 | Markdown lint      | `bun run lint:story "**/*.md" "#node_modules" "#.claude/**/templates/**"` |
 | Gherkin lint       | `bun run lint:gherkin`                                                    |
 
