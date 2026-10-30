@@ -6,13 +6,13 @@
 
 Each check is its own step, named in the run:
 
-| Step               | Command                                        |
-| ------------------ | ---------------------------------------------- |
-| Lint               | `bun run lint`                                 |
-| Format check       | `bun run format:check`                         |
-| Unused code (knip) | `bun run knip`                                 |
-| Markdown lint      | `bun run lint:story "**/*.md" "#node_modules"` |
-| Gherkin lint       | `bun run lint:gherkin`                         |
+| Step               | Command                                                                   |
+| ------------------ | ------------------------------------------------------------------------- |
+| Lint               | `bun run lint`                                                            |
+| Format check       | `bun run format:check`                                                    |
+| Unused code (knip) | `bun run knip`                                                            |
+| Markdown lint      | `bun run lint:story "**/*.md" "#node_modules" "#.claude/**/templates/**"` |
+| Gherkin lint       | `bun run lint:gherkin`                                                    |
 
 Run the same commands from the repository root to check a branch before pushing. Dependencies are installed with `bun install --frozen-lockfile --ignore-scripts`.
 

@@ -33,6 +33,6 @@ jobs:
       - name: Unused code (knip)
         run: bun run knip
       - name: Markdown lint
-        run: bun run lint:story "**/*.md" "#node_modules"
+        run: bun run lint:story "**/*.md" "#node_modules" "#.claude/**/templates/**"
       - name: Gherkin lint
         run: bun run lint:gherkin
